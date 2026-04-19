@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenuMate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @keyframes slowZoom {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .zoom-effect {
+            animation: slowZoom 15s infinite alternate ease-in-out;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Fix for ensuring full section height */
+        .full-screen {
+            min-height: 100vh;
+        }
+        .section-padding {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+        /* Scroll down to bottom of screen */
+        .scroll-down {
+            position: absolute;
+            bottom: 4rem;
+            transform: translateX(-0%);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding-top: 0;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        
+        /* Restaurant form styling */
+        .form-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-input {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .time-input {
+            max-width: 120px;
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- Header -->
+    <header class="flex justify-between items-center px-6 md:px-12 py-4 bg-black z-20 transition-all duration-300 ease-in-out">
+        <a href="../" class="text-white text-2xl font-bold z-20 relative">MenuMate</a>
+    
+        <!-- Mobile Hamburger Menu -->
+        <div class="md:hidden flex items-center">
+            <button id="hamburger" class="text-white text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center justify-center flex-grow space-x-8">
+            <div class="flex space-x-8">
+                <a href="../dashboard/" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700">Dashboard</a>
+                <a href="../menu" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700">Menu</a>
+                <a href="../restaurant" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700 bg-gray-900">Restaurant</a>
+            </div>
+        </div>
+    
+        <!-- Welcome message -->
+        <div class="hidden md:flex items-center space-x-4 ml-auto">
+            <span class="text-white text-lg font-semibold">Welcome, Akshat</span>
+        </div>
+    
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden absolute top-0 left-0 w-full h-screen bg-black bg-opacity-75 z-10 hidden">
+            <div class="flex justify-end p-6">
+                <button id="closeHamburger" class="text-white text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center space-y-6 text-white text-lg font-semibold">
+                <a href="#dashboard" class="px-4 py-2 hover:bg-gray-700">Dashboard</a>
+                <a href="#menu" class="px-4 py-2 hover:bg-gray-700">Menu</a>
+                <a href="#restaurant" class="px-4 py-2 hover:bg-gray-700">Restaurant</a>
+            </div>
+        </div>
+    </header>
+    <!-- Restaurant Details Section -->
+    <!-- Restaurant Details Section -->
+<!-- Restaurant Details Section -->
+<!-- Restaurant Details Section -->
+<section id="restaurant" class="relative full-screen bg-gray-900 pt-20 pb-12 px-4 md:px-8">
+    <div class="absolute inset-0 h-full w-full overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            class="absolute inset-0 h-full w-full object-cover" 
+            alt="Background Image">
+        <div class="absolute inset-0 bg-black opacity-70"></div>
+    </div>
+    
+    <div class="container mx-auto relative z-10 max-w-4xl">
+        <div class="bg-gray-300 bg-opacity-90 p-8 md:p-10 rounded-xl shadow-2xl border border-gray-700">
+            <h2 class="text-3xl font-bold text-black mb-8 text-center">Restaurant Profile</h2>
+            <form id="restaurantForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label class="block text-black-300 font-medium mb-2">Restaurant ID</label>
+                        <input type="text" name="restaurant_id" class="w-full px-4 py-3 rounded-lg bg-gray-300 text-black-200 border border-gray-600" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-black-300 font-medium mb-2">Name*</label>
+                        <input type="text" name="name" class="w-full px-4 py-3 rounded-lg bg-white text-black border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div class="form-group col-span-2">
+                        <label class="block text-black-300 font-medium mb-2">Description</label>
+                        <textarea name="description" class="w-full px-4 py-3 rounded-lg bg-white text-black border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 h-32"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-black-300 font-medium mb-2">Contact Email*</label>
+                        <input type="email" name="contact_email" class="w-full px-4 py-3 rounded-lg bg-white text-black border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-black-300 font-medium mb-2">Contact Phone*</label>
+                        <input type="tel" name="contact_phone" class="w-full px-4 py-3 rounded-lg bg-white text-black border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div class="form-group col-span-2">
+                        <label class="block text-black-300 font-medium mb-2">Address*</label>
+                        <textarea name="address" class="w-full px-4 py-3 rounded-lg bg-white text-black border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 h-24" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-black-300 font-medium mb-2">Number of Tables*</label>
+                        <input type="number" name="number_of_tables" class="w-full px-4 py-3 rounded-lg bg-white text-black border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500" min="1" required>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center pt-4">
+                    <button type="button" id="saveRestaurantBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+    <footer class="bg-black text-white text-center py-6">
+        <div class="container mx-auto px-6">
+            <p>&copy; 2024 MenuMate. All rights reserved.</p>
+            <div class="mt-4">
+                <a href="#" class="text-white hover:text-gray-400 mx-3">Privacy Policy</a>
+                <a href="#" class="text-white hover:text-gray-400 mx-3">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger menu functionality
+        const hamburger = document.getElementById("hamburger");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const closeHamburger = document.getElementById("closeHamburger");
+
+        hamburger.addEventListener("click", () => {
+            mobileMenu.classList.remove("hidden");
+        });
+
+        closeHamburger.addEventListener("click", () => {
+            mobileMenu.classList.add("hidden");
+        });
+
+        // Form submission
+        document.getElementById('restaurantForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Restaurant details saved successfully!');
+            // Here you would typically send the data to your backend
+        });
+
+        // Toggle time inputs when "Closed" is checked
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const timeInputs = this.closest('div').querySelectorAll('input[type="time"]');
+                timeInputs.forEach(input => {
+                    input.disabled = this.checked;
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+    loadRestaurantProfile();
+    
+    document.getElementById('saveRestaurantBtn').addEventListener('click', saveRestaurantProfile);
+});
+
+function loadRestaurantProfile() {
+    fetch('restaurant_profile/', {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (response.status === 403 || response.status === 302) {
+            window.location.href = '/login?next=' + encodeURIComponent(window.location.pathname);
+            return Promise.reject('Redirecting to login');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            if (data.error === 'No restaurant associated with this account') {
+                alert('No restaurant associated with your account. Please contact support.');
+                window.location.href = '/';
+            }
+            throw new Error(data.error);
+        }
+        
+        const form = document.getElementById('restaurantForm');
+        form.querySelector('input[name="restaurant_id"]').value = data.id;
+        form.querySelector('input[name="name"]').value = data.name || '';
+        form.querySelector('textarea[name="description"]').value = data.description || '';
+        form.querySelector('input[name="contact_email"]').value = data.contact_email || '';
+        form.querySelector('input[name="contact_phone"]').value = data.contact_phone || '';
+        form.querySelector('textarea[name="address"]').value = data.address || '';
+        form.querySelector('input[name="number_of_tables"]').value = data.number_of_tables || '';
+    })
+    .catch(error => {
+        if (error.message !== 'Redirecting to login') {
+            console.error('Error:', error);
+        }
+    });
+}
+
+function saveRestaurantProfile() {
+    const form = document.getElementById('restaurantForm');
+    const formData = {
+        name: form.querySelector('input[name="name"]').value,
+        description: form.querySelector('textarea[name="description"]').value,
+        contact_email: form.querySelector('input[name="contact_email"]').value,
+        contact_phone: form.querySelector('input[name="contact_phone"]').value,
+        address: form.querySelector('textarea[name="address"]').value,
+        number_of_tables: form.querySelector('input[name="number_of_tables"]').value
+    };
+
+    fetch('restaurant_profile/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': getCookie('csrftoken')  // Include CSRF token
+        },
+        credentials: 'include',
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (response.status === 403) {
+            window.location.href = '/login?next=' + encodeURIComponent(window.location.pathname);
+            return Promise.reject('Redirecting to login');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) throw new Error(data.error);
+        alert('Profile updated successfully!');
+    })
+    .catch(error => {
+        if (error.message !== 'Redirecting to login') {
+            console.error('Error:', error);
+            alert('Failed to update profile: ' + error.message);
+        }
+    });
+}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+    </script>
+</body>
+</html>

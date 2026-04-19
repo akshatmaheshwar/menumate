@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MenuMate - Dashboard</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+        <style>
+            /* Your existing styles remain the same */
+            .stat-card {
+                background: white;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                padding: 1.5rem;
+                transition: all 0.3s ease;
+            }
+            
+            .stat-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #1f2937;
+            }
+            
+            .stat-label {
+                color: #6b7280;
+                font-size: 0.875rem;
+                margin-top: 0.5rem;
+            }
+            
+            .order-card {
+                background: white;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .order-card:hover {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .order-header {
+                padding: 1rem 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .table-card {
+                background: white;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                padding: 1.5rem;
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+            
+            .table-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .table-number {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #1f2937;
+            }
+            
+            .status-select {
+                padding: 0.25rem 0.5rem;
+                border-radius: 0.25rem;
+                font-size: 0.75rem;
+                font-weight: 600;
+                border: 1px solid #e5e7eb;
+                cursor: pointer;
+            }
+            .status-received {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+}
+            .status-processing {
+                background-color: #FEF3C7;
+                color: #92400E;
+            }
+            
+            .status-completed {
+                background-color: #D1FAE5;
+                color: #065F46;
+            }
+        </style>
+    </head>
+    <body class="relative bg-gray-100">
+
+        <!-- Header -->
+        <header class="flex justify-between items-center px-6 md:px-12 py-4 bg-black z-20 transition-all duration-300 ease-in-out">
+            <a href="../" class="text-white text-2xl font-bold z-20 relative">MenuMate</a>
+        
+            <div class="md:hidden flex items-center">
+                <button id="hamburger" class="text-white text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        
+            <div class="hidden md:flex items-center justify-center flex-grow space-x-8">
+                <div class="flex space-x-8">
+                    <a href="../dashboard" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700 bg-gray-900">Dashboard</a>
+                    <a href="../menu" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700">Menu</a>
+                    <a href="../restaurant" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700">Restaurant</a>
+                </div>
+            </div>
+        
+            <div class="hidden md:flex items-center space-x-4 ml-auto">
+                <span class="text-white text-lg font-semibold">Welcome</span>
+            </div>
+        
+            <div id="mobileMenu" class="md:hidden absolute top-0 left-0 w-full h-screen bg-black bg-opacity-75 z-10 hidden">
+                <div class="flex justify-end p-6">
+                    <button id="closeHamburger" class="text-white text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col items-center space-y-6 text-white text-lg font-semibold">
+                    <a href="#dashboard" class="px-4 py-2 hover:bg-gray-700">Dashboard</a>
+                    <a href="#menu" class="px-4 py-2 hover:bg-gray-700">Menu</a>
+                    <a href="#restaurant" class="px-4 py-2 hover:bg-gray-700">Restaurant</a>
+                </div>
+            </div>
+        </header>
+        <section class="relative full-screen">
+        <div class="absolute inset-0 h-full w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                class="absolute inset-0 h-full w-full object-cover" 
+                alt="Background Image">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+        </div>
+        <!-- Main Content -->
+        <main class="relative pt-20 pb-8 px-4 md:px-8">
+            <div class="container mx-auto">
+                <h1 class="text-3xl font-bold text-white mb-8">Restaurant Dashboard</h1>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="stat-value" id="weeklyEarnings">$0</div>
+                        <div class="stat-label">Weekly Earnings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="processingOrders">0</div>
+                        <div class="stat-label">Processing Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="availableTables">0</div>
+                        <div class="stat-label">Available Tables</div>
+                    </div>
+                </div>
+                
+                <!-- Processing Orders Section -->
+                <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+                    <div class="p-4 border-b border-gray-200">
+                        <h2 class="text-xl font-bold text-gray-800">Processing Orders</h2>
+                    </div>
+                    <div class="p-4" id="processingOrdersList">
+                        <!-- Orders will be loaded here -->
+                        <p class="text-gray-500 text-center py-4">Loading orders...</p>
+                    </div>
+                </div>
+                
+                <!-- Available Tables Section -->
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-4 border-b border-gray-200">
+                        <h2 class="text-xl font-bold text-gray-800">Available Tables</h2>
+                    </div>
+                    <div class="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" id="availableTablesList">
+                        <!-- Tables will be loaded here -->
+                        <p class="text-gray-500 text-center py-4 col-span-full">Loading tables...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+</section>
+        <footer class="bg-black text-white text-center py-6">
+            <div class="container mx-auto px-6">
+                <p>&copy; 2024 MenuMate. All rights reserved.</p>
+                <div class="mt-4">
+                    <a href="#" class="text-white hover:text-gray-400 mx-3">Privacy Policy</a>
+                    <a href="#" class="text-white hover:text-gray-400 mx-3">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // Global variables
+            let restaurantData = null;
+            let ordersData = [];
+            let availableTables = [];
+            
+            // DOM Content Loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                fetchRestaurantData();
+                setupEventListeners();
+            });
+            
+            // Fetch restaurant data
+            function fetchRestaurantData() {
+                fetch('api/get_restaurant_data/')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) throw new Error(data.error);
+                        
+                        restaurantData = data.restaurant;
+                        ordersData = data.orders;
+                        
+                        // Update stats
+                        updateStats();
+                        
+                        // Render processing orders
+                        renderProcessingOrders();
+                        
+                        // Render available tables
+                        renderAvailableTables();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to load restaurant data');
+                    });
+            }
+            
+            // Update stats
+            // Update stats
+function updateStats() {
+    if (!restaurantData) return;
+    
+    // Weekly earnings (sum of all completed orders in last 7 days)
+    const weeklyEarnings = ordersData
+        .filter(order => order.status === 'completed' && isWithinLastWeek(order.created_at))
+        .reduce((sum, order) => {
+            const orderTotal = order.items.reduce((orderSum, item) => 
+                orderSum + (item.price * item.quantity), 0);
+            return sum + orderTotal;
+        }, 0);
+    
+    document.getElementById('weeklyEarnings').textContent = `$${weeklyEarnings.toFixed(2)}`;
+    
+    // Processing orders count (both received and processing)
+    const processingCount = ordersData.filter(order => 
+        order.status === 'processing' || order.status === 'received').length;
+    document.getElementById('processingOrders').textContent = processingCount;
+    
+    // Available tables count
+    const occupiedTables = ordersData
+        .filter(order => order.status === 'processing' || order.status === 'received')
+        .map(order => order.table_number);
+    
+    const availableCount = restaurantData.number_of_tables - occupiedTables.length;
+    document.getElementById('availableTables').textContent = availableCount;
+}
+            
+            // Render processing orders
+            function renderProcessingOrders() {
+    const container = document.getElementById('processingOrdersList');
+    if (!container) return;
+    
+    // Include both processing and received orders
+    const processingOrders = ordersData.filter(order => 
+        order.status === 'processing' || order.status === 'received');
+    
+    if (processingOrders.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">No active orders</p>';
+        return;
+    }
+    
+    container.innerHTML = '';
+    
+    processingOrders.forEach(order => {
+        // Determine status badge class based on status
+        const statusClass = order.status === 'processing' ? 'status-processing' : 'status-received';
+        const statusText = order.status === 'processing' ? 'Processing' : 'Received';
+        
+        const orderCard = document.createElement('div');
+        orderCard.className = 'order-card mb-4';
+        orderCard.innerHTML = `
+            <div class="order-header" data-order-id="${order.id}">
+                <div>
+                    <span class="font-bold">Table ${order.table_number}</span>
+                    <span class="text-gray-500 ml-2">${order.items.length} items</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                    <button class="print-qr-btn px-3 py-1 bg-blue-600 text-white rounded-lg text-sm" 
+                            data-table="${order.table_number}">
+                        <i class="fas fa-print mr-1"></i>Print QR
+                    </button>
+                </div>
+            </div>
+            <div class="expanded-details hidden" id="details-${order.id}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease;">
+                <div class="p-4">
+                    <div class="mb-4">
+                        <h4 class="font-bold text-lg mb-2">Order Details</h4>
+                        <p><strong>Table:</strong> ${order.table_number}</p>
+                        <p><strong>Status:</strong> 
+                            <select class="status-select ${statusClass}" data-order-id="${order.id}">
+                                <option value="received" ${order.status === 'received' ? 'selected' : ''}>Received</option>
+                                <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                                <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                            </select>
+                        </p>
+                        <p><strong>Created:</strong> ${new Date(order.created_at).toLocaleString()}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h4 class="font-bold text-lg mb-2">Order Items</h4>
+                        <div class="space-y-4">
+                            ${order.items.map(item => `
+                                <div class="flex items-start gap-4 p-3 bg-gray-50 rounded-lg">
+                                    ${item.image ? `<img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">` : 
+                                      '<div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">' +
+                                      '<i class="fas fa-utensils text-gray-400 text-xl"></i></div>'}
+                                    <div class="flex-1">
+                                        <div class="font-medium">${item.name}</div>
+                                        <div class="text-gray-600">$${item.price} × ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}</div>
+                                        ${item.description ? `<div class="text-sm text-gray-500 mt-1">${item.description}</div>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mt-4">
+                        <div class="total-amount font-bold text-lg">
+                            Total: $${order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+                        </div>
+                        <button class="update-status-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                                data-order-id="${order.id}">
+                            Update Status
+                        </button>
+                    </div>
+                    
+                    <div class="qr-code-container mt-4 flex justify-center" id="qr-${order.id}"></div>
+                </div>
+            </div>
+        `;
+        container.appendChild(orderCard);
+        
+        // Generate QR code
+        new QRCode(document.getElementById(`qr-${order.id}`), {
+            text: `${window.location.origin}/tabletapapp/order/${restaurantData.id}/${order.table_number}`,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    });
+    
+    // Set up event listeners for order cards
+    document.querySelectorAll('.order-header').forEach(header => {
+        header.addEventListener('click', function(e) {
+            // Don't toggle if clicking on print button
+            if (e.target.closest('.print-qr-btn')) {
+                return;
+            }
+            
+            const orderId = this.getAttribute('data-order-id');
+            const details = document.getElementById(`details-${orderId}`);
+            if (details) {
+                if (details.classList.contains('hidden')) {
+                    details.classList.remove('hidden');
+                    details.style.maxHeight = details.scrollHeight + 'px';
+                } else {
+                    details.style.maxHeight = '0';
+                    // Wait for transition to complete before hiding
+                    setTimeout(() => {
+                        details.classList.add('hidden');
+                    }, 300);
+                }
+            }
+        });
+    });
+    
+    // Set up status update buttons
+    document.querySelectorAll('.update-status-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-order-id');
+            const select = document.querySelector(`.status-select[data-order-id="${orderId}"]`);
+            if (select) {
+                const newStatus = select.value;
+                updateOrderStatus(orderId, newStatus);
+            }
+        });
+    });
+}
+            
+            // Render available tables
+            function renderAvailableTables() {
+    if (!restaurantData) return;
+    
+    const container = document.getElementById('availableTablesList');
+    if (!container) return;
+    
+    // Get occupied tables from both processing and received orders
+    const occupiedTables = ordersData
+        .filter(order => order.status === 'processing' || order.status === 'received')
+        .map(order => order.table_number);
+                
+                // Generate array of all tables (1 to number_of_tables)
+                const allTables = Array.from({length: restaurantData.number_of_tables}, (_, i) => i + 1);
+                
+                // Filter out occupied tables
+                availableTables = allTables.filter(table => !occupiedTables.includes(table));
+                
+                if (availableTables.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500 text-center py-4 col-span-full">No available tables</p>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                availableTables.forEach(table => {
+                    const tableCard = document.createElement('div');
+                    tableCard.className = 'table-card';
+                    tableCard.innerHTML = `
+                        <div class="table-number"> Table ${table}</div>
+                        <div class="status-badge status-available mt-2">Available</div>
+                        <button class="print-qr-btn mt-4 px-3 py-1 bg-blue-600 text-white rounded-lg text-sm w-full"
+                                data-table="${table}">
+                            <i class="fas fa-print mr-1"></i>Print QR
+                        </button>
+                        <div class="qr-code-container mt-2 flex justify-center" id="table-qr-${table}"></div>
+                    `;
+                    container.appendChild(tableCard);
+                    
+                    // Generate QR code for table
+                    new QRCode(document.getElementById(`table-qr-${table}`), {
+                        text: `${window.location.origin}/tabletapapp/order/${restaurantData.id}/${table}`,
+                        width: 100,
+                        height: 100,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                });
+                
+                // Set up print QR buttons for tables
+                document.querySelectorAll('.print-qr-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const tableNumber = this.getAttribute('data-table');
+                        printQRCode(tableNumber);
+                    });
+                });
+            }
+            
+            // Update order status
+            // Update order status
+            function updateOrderStatus(orderId, newStatus) {
+    fetch('/tabletapapp/dashboard/api/update_order_status/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({
+            order_id: orderId,
+            status: newStatus
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Find and update the order in our local data
+            const orderIndex = ordersData.findIndex(o => o.id == orderId);
+            if (orderIndex !== -1) {
+                ordersData[orderIndex].status = newStatus;
+            }
+            
+            // Update the UI
+            const statusBadge = document.querySelector(`.order-header[data-order-id="${orderId}"] .status-badge`);
+            if (statusBadge) {
+                // Remove all status classes
+                statusBadge.classList.remove('status-received', 'status-processing', 'status-completed');
+                
+                // Add the correct class
+                if (newStatus === 'received') {
+                    statusBadge.classList.add('status-received');
+                    statusBadge.textContent = 'Received';
+                } else if (newStatus === 'processing') {
+                    statusBadge.classList.add('status-processing');
+                    statusBadge.textContent = 'Processing';
+                } else if (newStatus === 'completed') {
+                    statusBadge.classList.add('status-completed');
+                    statusBadge.textContent = 'Completed';
+                }
+            }
+            
+            // Also update the select element's class
+            const statusSelect = document.querySelector(`.status-select[data-order-id="${orderId}"]`);
+            if (statusSelect) {
+                statusSelect.className = `status-select status-${newStatus}`;
+            }
+            
+            // Refresh the stats
+            updateStats();
+            // Refresh the available tables
+            renderAvailableTables();
+        } else {
+            alert('Failed to update status: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Update failed:', error);
+        alert('Update failed: ' + error.message);
+    });
+}
+            
+            // Print QR code
+            function getQRCodeHTML(tableNumber) {
+    const qrImg = document.getElementById('table-qr-' + tableNumber).querySelector('img');
+    const qrSrc = qrImg.src;
+    
+    return '<!DOCTYPE html>' +
+        '<html>' +
+        '<head>' +
+            '<title>Table ' + tableNumber + ' QR Code</title>' +
+            '<style>' +
+                'body { text-align: center; padding: 2rem; }' +
+                'h1 { margin-bottom: 1rem; }' +
+                'img { margin: 0 auto; }' +
+            '</style>' +
+        '</head>' +
+        '<body>' +
+            '<h1>Table ' + tableNumber + '</h1>' +
+            '<img src="' + qrSrc + '" alt="QR Code">' +
+            '<p>Scan to order</p>' +
+            '<script>' +
+                'window.onload = function() { window.print(); }' +
+            '<' + '/script>' +
+        '</body>' +
+        '</html>';
+}
+
+function printQRCode(tableNumber) {
+    const qrWindow = window.open('', '_blank');
+    const qrContent = `<`+`!DOCTYPE html`+`>`+`
+        <html>
+        <head>
+            <title>Table ${tableNumber} QR Code</title>
+            <style>
+                body { 
+                    text-align: center; 
+                    padding: 2rem; 
+                    font-family: Arial, sans-serif;
+                }
+                h1 { 
+                    margin-bottom: 1rem; 
+                    color: #333;
+                }
+                img { 
+                    margin: 1rem auto; 
+                    display: block;
+                }
+                p {
+                    color: #666;
+                    font-size: 1.2rem;
+                }
+            `+`</style>
+        `+`</head>
+        <body>
+            <h1>Table ${tableNumber}</h1>
+            <p>Scan to order</p>
+            <div id="qr-code"></div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"`+`>`+`<`+`/script>
+            <script>
+                new QRCode(document.getElementById("qr-code"), {
+                    text: "${window.location.origin}/tabletapapp/order/${restaurantData.id}/${tableNumber}",
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                window.onload = function() { 
+                    setTimeout(() => {
+                        window.print();
+                        window.close();
+                    }, 500);
+                }
+            `+`<`+`/script>
+        `+`<`+`/body>
+        `+`<`+`/html`+`>`;
+    qrWindow.document.write(qrContent);
+    qrWindow.document.close();
+}
+            
+            // Helper function to check if date is within last week
+            function isWithinLastWeek(dateString) {
+                const date = new Date(dateString);
+                const oneWeekAgo = new Date();
+                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                return date > oneWeekAgo;
+            }
+            
+            // Helper function to get CSRF token
+            function getCSRFToken() {
+                const csrfCookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
+                return csrfCookie ? csrfCookie.split('=')[1] : '';
+            }
+            
+            // Set up event listeners
+            function setupEventListeners() {
+                // Hamburger menu toggle
+                document.getElementById('hamburger').addEventListener('click', () => {
+                    document.getElementById('mobileMenu').classList.remove('hidden');
+                });
+                
+                document.getElementById('closeHamburger').addEventListener('click', () => {
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                });
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenuMate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @keyframes slowZoom {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .zoom-effect {
+            animation: slowZoom 15s infinite alternate ease-in-out;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .full-screen {
+            min-height: 100vh;
+        }
+        .section-padding {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+        .scroll-down {
+            position: absolute;
+            bottom: 4rem;
+            transform: translateX(-0%);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            padding-top: 0;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            width: 100%;
+        }
+        .menu-item-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        .menu-item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .category-tabs-container {
+            position: relative;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            margin-right: 0.5rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .category-tab:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .category-tab.active {
+            background-color: #1f2937;
+            color: white;
+        }
+        
+        .category-dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        .category-dropdown-btn {
+            color: #6b7280;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .category-dropdown-btn:hover {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .category-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 1rem;
+            top: 100%;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            z-index: 1000;
+            margin-top: 0.25rem;
+            overflow: hidden;
+        }
+        
+        .category-dropdown-content a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #4b5563;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .category-dropdown-content a:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .show-dropdown {
+            display: block;
+        }
+    
+        .bg-white.rounded-lg.shadow.overflow-hidden {
+            overflow: visible !important;
+        }
+        
+        .flex.flex-1.overflow-x-auto {
+            overflow: visible !important;
+        }
+        
+        /* Menu Type Tabs */
+        .menu-type-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-type-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .menu-type-tab:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .menu-type-tab.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        /* Menu Type Content */
+        .menu-type-content {
+            display: none;
+        }
+        
+        .menu-type-content.active {
+            display: block;
+        }
+            /* Menu Type Tabs */
+    .menu-type-tabs {
+        display: flex;
+        border-bottom: 1px solid #e2e8f0;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    
+    .menu-type-tabs::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    
+    .menu-type-tab {
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .menu-type-tab:hover {
+        background-color: #f3f4f6;
+    }
+    
+    .menu-type-tab.active {
+        border-bottom-color: #3b82f6;
+        color: #3b82f6;
+        font-weight: 600;
+    }
+    
+    /* Add Menu Button */
+    .add-menu-btn {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background-color: #3b82f6;
+        color: white;
+        border-radius: 0.375rem;
+        margin-left: auto;
+        flex-shrink: 0;
+        transition: background-color 0.2s;
+    }
+    
+    .add-menu-btn:hover {
+        background-color: #2563eb;
+    }
+    
+    .add-menu-btn i {
+        margin-right: 0.5rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .menu-type-tabs {
+            padding-bottom: 0.5rem;
+        }
+        
+        .menu-type-tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .add-menu-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+    }
+    </style>
+</head>
+<body class="relative bg-gray-100">
+
+    <!-- Header -->
+    <header class="flex justify-between items-center px-6 md:px-12 py-4 bg-black z-20 transition-all duration-300 ease-in-out">
+        <a href="../" class="text-white text-2xl font-bold z-20 relative">MenuMate</a>
+    
+        <div class="md:hidden flex items-center">
+            <button id="hamburger" class="text-white text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    
+        <div class="hidden md:flex items-center justify-center flex-grow space-x-8">
+            <div class="flex space-x-8">
+                <a href="../dashboard" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700">Dashboard</a>
+                <a href="../menu" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700 bg-gray-900">Menu</a>
+                <a href="../restaurant" class="text-white text-sm font-semibold px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700">Restaurant</a>
+            </div>
+        </div>
+    
+        <div class="hidden md:flex items-center space-x-4 ml-auto">
+            <span class="text-white text-lg font-semibold">Welcome, Akshat</span>
+        </div>
+    
+        <div id="mobileMenu" class="md:hidden absolute top-0 left-0 w-full h-screen bg-black bg-opacity-75 z-10 hidden">
+            <div class="flex justify-end p-6">
+                <button id="closeHamburger" class="text-white text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center space-y-6 text-white text-lg font-semibold">
+                <a href="#dashboard" class="px-4 py-2 hover:bg-gray-700">Dashboard</a>
+                <a href="#menu" class="px-4 py-2 hover:bg-gray-700">Menu</a>
+                <a href="#restaurant" class="px-4 py-2 hover:bg-gray-700">Restaurant</a>
+            </div>
+        </div>
+    </header>
+    <section class="relative full-screen">
+        <div class="absolute inset-0 h-full w-full overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                class="absolute inset-0 h-full w-full object-cover " 
+                alt="Background Image">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+        </div>
+    <!-- Main Content -->
+    <main class="relative pt-20 pb-8 px-4 md:px-8">
+        <!-- Menu Management Section -->
+        <section id="menu" class="mb-12">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+                <h2 class="text-3xl font-bold text-white">Menu Management</h2>
+                <div class="action-buttons">
+                    <button id="addMenuBtn" class="px-3 py-2 md:px-4 md:py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition whitespace-nowrap">
+                        <i class="fas fa-plus mr-1 md:mr-2"></i>Add Menu
+                    </button>
+                    <button id="addCategoryBtn" class="px-3 py-2 md:px-4 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition whitespace-nowrap">
+                        <i class="fas fa-plus mr-1 md:mr-2"></i>Add Category
+                    </button>
+                    <button id="addMenuItemBtn" class="px-3 py-2 md:px-4 md:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition whitespace-nowrap">
+                        <i class="fas fa-plus mr-1 md:mr-2"></i>Add Menu Item
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow mb-6">
+                <div class="menu-type-tabs" id="menuTypeTabs">
+                <!-- Tabs will be loaded here via JavaScript -->
+                </div>
+            </div>
+
+            <div id="menuContentContainer">
+                <!-- Content for each menu type will be loaded here via JavaScript -->
+            </div>
+
+           <!-- Add this modal for creating a new menu -->
+<div id="menuModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Add New Menu</h3>
+            <button id="closeMenuModal" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <form id="menuForm">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Menu Name</label>
+                    <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="cancelMenu" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Save Menu
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update the category modal to include menu selection -->
+<div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Add New Category</h3>
+            <button id="closeCategoryModal" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <form id="categoryForm">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Menu</label>
+                    <select name="menu_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                        <option value="">Select Menu</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Category Name</label>
+                    <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="cancelCategory" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Save Category
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update the menu item modal to include category selection -->
+<div id="menuItemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Add Menu Item</h3>
+            <button id="closeMenuItemModal" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <form id="menuItemForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Category</label>
+                    <select name="category_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Item Name</label>
+                    <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Description</label>
+                    <textarea name="description" class="w-full px-3 py-2 border border-gray-300 rounded-lg" rows="3"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Price</label>
+                    <input type="number" step="0.01" name="price" class="w-full px-3 py-2 border border-gray-300 rounded-lg" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Item Image</label>
+                    <input type="file" name="image" class="w-full px-3 py-2">
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="cancelMenuItem" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Save Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+            <!-- Delete Confirmation Modal -->
+            <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+                    <div class="p-6">
+                        <div class="text-center">
+                            <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                            <h3 class="text-lg font-semibold mb-2">Confirm Deletion</h3>
+                            <p class="text-gray-600 mb-6">Are you sure you want to delete this item? This action cannot be undone.</p>
+                            <div class="flex justify-center space-x-4">
+                                <button id="cancelDelete" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+                                    Cancel
+                                </button>
+                                <button id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    </section>
+
+    <footer class="bg-black text-white text-center py-6">
+        <div class="container mx-auto px-6">
+            <p>&copy; 2024 MenuMate. All rights reserved.</p>
+            <div class="mt-4">
+                <a href="#" class="text-white hover:text-gray-400 mx-3">Privacy Policy</a>
+                <a href="#" class="text-white hover:text-gray-400 mx-3">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables to track current item being edited/deleted
+        let currentEditingItem = null;
+        let currentDeletingItem = null;
+        let currentDeletingItemType = null;
+    
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMenus();
+            setupEventListeners();
+        });
+    
+        // ==================== EVENT LISTENERS SETUP ====================
+        function setupEventListeners() {
+            // Hamburger menu
+            document.getElementById("hamburger").addEventListener("click", () => 
+                document.getElementById("mobileMenu").classList.remove("hidden"));
+            document.getElementById("closeHamburger").addEventListener("click", () => 
+                document.getElementById("mobileMenu").classList.add("hidden"));
+    
+            // Menu Modal
+            const menuModal = document.getElementById("menuModal");
+            document.getElementById("addMenuBtn").addEventListener("click", () => {
+                currentEditingItem = null;
+                menuModal.classList.remove("hidden");
+                document.querySelector('#menuModal h3').textContent = 'Add New Menu';
+                document.getElementById('menuForm').reset();
+            });
+            document.getElementById("closeMenuModal").addEventListener("click", () => menuModal.classList.add("hidden"));
+            document.getElementById("cancelMenu").addEventListener("click", () => menuModal.classList.add("hidden"));
+    
+            // Category Modal
+            const categoryModal = document.getElementById("categoryModal");
+            document.getElementById("addCategoryBtn").addEventListener("click", () => {
+                currentEditingItem = null;
+                fetchMenusForDropdown('menu_id');
+                categoryModal.classList.remove("hidden");
+                document.querySelector('#categoryModal h3').textContent = 'Add New Category';
+                document.getElementById('categoryForm').reset();
+            });
+            document.getElementById("closeCategoryModal").addEventListener("click", () => categoryModal.classList.add("hidden"));
+            document.getElementById("cancelCategory").addEventListener("click", () => categoryModal.classList.add("hidden"));
+    
+            // Menu Item Modal
+            const menuItemModal = document.getElementById("menuItemModal");
+            document.getElementById("addMenuItemBtn").addEventListener("click", () => {
+                currentEditingItem = null;
+                fetchCategoriesForDropdown('category_id');
+                menuItemModal.classList.remove("hidden");
+                document.querySelector('#menuItemModal h3').textContent = 'Add Menu Item';
+                document.getElementById('menuItemForm').reset();
+            });
+            document.getElementById("closeMenuItemModal").addEventListener("click", () => menuItemModal.classList.add("hidden"));
+            document.getElementById("cancelMenuItem").addEventListener("click", () => menuItemModal.classList.add("hidden"));
+    
+            // Delete Modal
+            const deleteModal = document.getElementById("deleteModal");
+            document.getElementById("cancelDelete").addEventListener("click", () => deleteModal.classList.add("hidden"));
+            document.getElementById("confirmDelete").addEventListener("click", () => {
+                if (currentDeletingItem && currentDeletingItemType) {
+                    deleteItem(currentDeletingItemType, currentDeletingItem);
+                }
+                deleteModal.classList.add("hidden");
+            });
+    
+            // Form submissions
+            document.getElementById('menuForm').addEventListener('submit', submitMenuForm);
+            document.getElementById('categoryForm').addEventListener('submit', submitCategoryForm);
+            document.getElementById('menuItemForm').addEventListener('submit', submitMenuItemForm);
+        }
+    
+        // ==================== MENU FUNCTIONS ====================
+        function loadMenus() {
+            fetch('get_menus/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    const menuTypeTabs = document.getElementById('menuTypeTabs');
+                    const menuContentContainer = document.getElementById('menuContentContainer');
+                    
+                    // Clear existing content
+                    menuTypeTabs.innerHTML = '';
+                    menuContentContainer.innerHTML = '';
+                    
+                    // Create tabs and content sections for each menu
+                    data.menus.forEach((menu, index) => {
+                        // Create tab
+                        const tab = document.createElement('div');
+                        tab.className = `menu-type-tab ${index === 0 ? 'active' : ''}`;
+                        tab.innerHTML = `
+                            ${menu.name}
+                            <button class="ml-2 text-blue-500 hover:text-blue-700 update-menu" 
+                                    data-menu-id="${menu.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="ml-2 text-red-500 hover:text-red-700 delete-menu" 
+                                    data-menu-id="${menu.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                        tab.setAttribute('data-menu-id', menu.id);
+                        
+                        // Tab click handler
+                        tab.addEventListener('click', function(e) {
+                            if (!e.target.closest('.update-menu, .delete-menu')) {
+                                document.querySelectorAll('.menu-type-tab').forEach(t => t.classList.remove('active'));
+                                this.classList.add('active');
+                                document.querySelectorAll('.menu-type-content').forEach(c => c.classList.remove('active'));
+                                document.getElementById(`menu-${menu.id}`).classList.add('active');
+                            }
+                        });
+                        
+                        // Add edit/delete button handlers
+                        tab.querySelector('.update-menu').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            editMenu(menu.id);
+                        });
+                        
+                        tab.querySelector('.delete-menu').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            showDeleteConfirmation('menu', menu.id);
+                        });
+                        
+                        menuTypeTabs.appendChild(tab);
+                        
+                        // Create content section
+                        const contentSection = document.createElement('div');
+                        contentSection.className = `menu-type-content ${index === 0 ? 'active' : ''}`;
+                        contentSection.id = `menu-${menu.id}`;
+                        contentSection.innerHTML = `
+                            <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+                                <div class="category-tabs-container">
+                                    <div class="flex items-center">
+                                        <div class="category-tabs" id="categories-${menu.id}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" id="menuItems-${menu.id}"></div>
+                        `;
+                        menuContentContainer.appendChild(contentSection);
+                        
+                        // Load categories and menu items
+                        loadCategories(menu.id);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading menus:', error);
+                    alert('Failed to load menus');
+                });
+        }
+    
+        function editMenu(menuId) {
+    fetch(`get_menus/?menu_id=${menuId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) throw new Error(data.error);
+            
+            currentEditingItem = menuId;
+            const form = document.getElementById('menuForm');
+            form.querySelector('input[name="name"]').value = data.menu.name;  // Fixed: data.menu.name
+            
+            document.querySelector('#menuModal h3').textContent = 'Edit Menu';
+            document.getElementById('menuModal').classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to load menu details');
+        });
+}
+    
+        function submitMenuForm(e) {
+            e.preventDefault();
+            const form = document.getElementById('menuForm');
+            const formData = new FormData(form);
+            const url = currentEditingItem ? `update_menu/` : 'add_menu/';
+            
+            if (currentEditingItem) {
+                formData.append('id', currentEditingItem);
+            }
+            
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('menuModal').classList.add('hidden');
+                    loadMenus();
+                } else {
+                    throw new Error(data.error || 'Operation failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'An error occurred');
+            });
+        }
+    
+        // ==================== CATEGORY FUNCTIONS ====================
+        function loadCategories(menuId) {
+            fetch(`get_categories/?menu_id=${menuId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    const categoriesContainer = document.getElementById(`categories-${menuId}`);
+                    const menuItemsContainer = document.getElementById(`menuItems-${menuId}`);
+                    
+                    // Clear existing content
+                    categoriesContainer.innerHTML = '';
+                    menuItemsContainer.innerHTML = '';
+                    
+                    // Add "All" tab
+                    const allTab = document.createElement('div');
+                    allTab.className = 'category-tab active';
+                    allTab.textContent = 'All';
+                    allTab.setAttribute('data-category-id', 'all');
+                    allTab.addEventListener('click', function() {
+                        document.querySelectorAll(`#categories-${menuId} .category-tab`).forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        loadMenuItems(menuId);
+                    });
+                    categoriesContainer.appendChild(allTab);
+                    
+                    // Add category tabs
+                    data.categories.forEach(category => {
+                        const tab = document.createElement('div');
+                        tab.className = 'category-tab';
+                        tab.innerHTML = `
+                            ${category.name}
+                            <button class="ml-2 text-blue-500 hover:text-blue-700 update-category" 
+                                    data-category-id="${category.id}" 
+                                    data-category-name="${category.name}" 
+                                    data-menu-id="${menuId}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="ml-2 text-red-500 hover:text-red-700 delete-category" 
+                                    data-category-id="${category.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                        tab.setAttribute('data-category-id', category.id);
+                        
+                        // Tab click handler
+                        tab.addEventListener('click', function(e) {
+                            if (!e.target.closest('.update-category, .delete-category')) {
+                                document.querySelectorAll(`#categories-${menuId} .category-tab`).forEach(t => t.classList.remove('active'));
+                                this.classList.add('active');
+                                loadMenuItems(menuId, category.id);
+                            }
+                        });
+                        
+                        // Add edit/delete button handlers
+                        tab.querySelector('.update-category').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const categoryId = e.target.closest('button').getAttribute('data-category-id');
+                            const categoryName = e.target.closest('button').getAttribute('data-category-name');
+                            const menuId = e.target.closest('button').getAttribute('data-menu-id');
+                            editCategory(categoryId, categoryName, menuId);
+                        });
+                        
+                        tab.querySelector('.delete-category').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const categoryId = e.target.closest('button').getAttribute('data-category-id');
+                            showDeleteConfirmation('category', categoryId);
+                        });
+                        
+                        categoriesContainer.appendChild(tab);
+                    });
+                    
+                    // Load menu items
+                    loadMenuItems(menuId);
+                })
+                .catch(error => {
+                    console.error('Error loading categories:', error);
+                    alert('Failed to load categories');
+                });
+        }
+    
+        function editCategory(categoryId, categoryName, menuId) {
+            currentEditingItem = categoryId;
+            fetchMenusForDropdown('menu_id', menuId);
+            
+            const form = document.getElementById('categoryForm');
+            form.querySelector('input[name="name"]').value = categoryName;
+            
+            document.querySelector('#categoryModal h3').textContent = 'Edit Category';
+            document.getElementById('categoryModal').classList.remove('hidden');
+        }
+    
+        function submitCategoryForm(e) {
+            e.preventDefault();
+            const form = document.getElementById('categoryForm');
+            const formData = new FormData(form);
+            const url = currentEditingItem ? `update_category/` : 'add_category/';
+            
+            if (currentEditingItem) {
+                formData.append('id', currentEditingItem);
+            }
+            
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('categoryModal').classList.add('hidden');
+                    const menuId = formData.get('menu_id');
+                    if (menuId) loadCategories(menuId);
+                } else {
+                    throw new Error(data.error || 'Operation failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'An error occurred');
+            });
+        }
+    
+        // ==================== MENU ITEM FUNCTIONS ====================
+        function loadMenuItems(menuId, categoryId = null) {
+            let url = `get_menu_items/?menu_id=${menuId}`;
+            if (categoryId && categoryId !== 'all') url += `&category_id=${categoryId}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    const menuItemsContainer = document.getElementById(`menuItems-${menuId}`);
+                    menuItemsContainer.innerHTML = data.menu_items.length === 0 ? 
+                        '<p class="text-gray-500 col-span-3 text-center py-8">No menu items found</p>' : 
+                        data.menu_items.map(item => `
+                            <div class="menu-item-card bg-white rounded-lg shadow overflow-hidden">
+                                <img src="${item.image || 'https://placehold.co/600x400?text=No+Image'}" 
+                                     alt="${item.name}" 
+                                     class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="text-lg font-bold">${item.name}</h3>
+                                        <span class="text-lg font-semibold text-green-600">$${item.price}</span>
+                                    </div>
+                                    <p class="text-gray-600 mt-2">${item.description || 'No description available'}</p>
+                                    <div class="mt-3">
+                                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                            ${item.category_name}
+                                        </span>
+                                    </div>
+                                    <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between">
+                                        <button class="text-blue-600 hover:text-blue-800 edit-item" data-item-id="${item.id}">
+                                            <i class="fas fa-edit mr-1"></i>Edit
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-800 delete-item" data-item-id="${item.id}">
+                                            <i class="fas fa-trash mr-1"></i>Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    
+                    // Setup event listeners for edit/delete buttons
+                    document.querySelectorAll(`#menuItems-${menuId} .edit-item`).forEach(btn => {
+                        btn.addEventListener('click', () => editMenuItem(btn.getAttribute('data-item-id')));
+                    });
+                    
+                    document.querySelectorAll(`#menuItems-${menuId} .delete-item`).forEach(btn => {
+                        btn.addEventListener('click', () => showDeleteConfirmation('menu_item', btn.getAttribute('data-item-id')));
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading menu items:', error);
+                    alert('Failed to load menu items');
+                });
+        }
+    
+        function editMenuItem(itemId) {
+            fetch(`get_menu_item/?item_id=${itemId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    currentEditingItem = itemId;
+                    fetchCategoriesForDropdown('category_id', data.menu_item.category_id);
+                    
+                    const form = document.getElementById('menuItemForm');
+                    form.querySelector('input[name="name"]').value = data.menu_item.name;
+                    form.querySelector('textarea[name="description"]').value = data.menu_item.description || '';
+                    form.querySelector('input[name="price"]').value = data.menu_item.price;
+                    
+                    document.querySelector('#menuItemModal h3').textContent = 'Edit Menu Item';
+                    document.getElementById('menuItemModal').classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to load menu item details');
+                });
+        }
+    
+        function submitMenuItemForm(e) {
+            e.preventDefault();
+            const form = document.getElementById('menuItemForm');
+            const formData = new FormData(form);
+            const url = currentEditingItem ? `update_menu_item/` : 'add_menu_item/';
+            
+            if (currentEditingItem) {
+                formData.append('id', currentEditingItem);
+            }
+            
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('menuItemModal').classList.add('hidden');
+                    const activeMenuTab = document.querySelector('.menu-type-tab.active');
+                    if (activeMenuTab) {
+                        const menuId = activeMenuTab.getAttribute('data-menu-id');
+                        const activeCategoryTab = document.querySelector(`#categories-${menuId} .category-tab.active`);
+                        if (activeCategoryTab) {
+                            const categoryId = activeCategoryTab.getAttribute('data-category-id');
+                            loadMenuItems(menuId, categoryId);
+                        }
+                    }
+                } else {
+                    throw new Error(data.error || 'Operation failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'An error occurred');
+            });
+        }
+    
+        // ==================== UTILITY FUNCTIONS ====================
+        function showDeleteConfirmation(itemType, itemId) {
+            currentDeletingItem = itemId;
+            currentDeletingItemType = itemType;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+    
+        function deleteItem(itemType, itemId) {
+            fetch(`delete_${itemType}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: JSON.stringify({ id: itemId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reload the appropriate section
+                    if (itemType === 'menu') {
+                        loadMenus();
+                    } else if (itemType === 'category') {
+                        const activeMenuTab = document.querySelector('.menu-type-tab.active');
+                        if (activeMenuTab) {
+                            loadCategories(activeMenuTab.getAttribute('data-menu-id'));
+                        }
+                    } else if (itemType === 'menu_item') {
+                        const activeMenuTab = document.querySelector('.menu-type-tab.active');
+                        if (activeMenuTab) {
+                            const menuId = activeMenuTab.getAttribute('data-menu-id');
+                            const activeCategoryTab = document.querySelector(`#categories-${menuId} .category-tab.active`);
+                            loadMenuItems(menuId, activeCategoryTab?.getAttribute('data-category-id'));
+                        }
+                    }
+                } else {
+                    throw new Error(data.error || 'Failed to delete item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'Failed to delete item');
+            });
+        }
+    
+        function fetchMenusForDropdown(selectName, selectedId = null) {
+            fetch('get_menus/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    const select = document.querySelector(`select[name="${selectName}"]`);
+                    select.innerHTML = '<option value="">Select Menu</option>';
+                    
+                    data.menus.forEach(menu => {
+                        const option = document.createElement('option');
+                        option.value = menu.id;
+                        option.textContent = menu.name;
+                        if (selectedId && menu.id == selectedId) option.selected = true;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error loading menus:', error));
+        }
+    
+        function fetchCategoriesForDropdown(selectName, selectedId = null) {
+            fetch('get_categories/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    const select = document.querySelector(`select[name="${selectName}"]`);
+                    select.innerHTML = '<option value="">Select Category</option>';
+                    
+                    data.categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.id;
+                        option.textContent = `${category.menu_name} - ${category.name}`;
+                        if (selectedId && category.id == selectedId) option.selected = true;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error loading categories:', error));
+        }
+    
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+    </script>
+</body>
+</html>
