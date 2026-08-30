@@ -5,8 +5,13 @@ name = "pypi"
 
 [packages]
 django = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
+whitenoise = "*"
+pillow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.13"
+python_version = "3.14"
