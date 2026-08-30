@@ -605,8 +605,8 @@ def handle_signup(request):
                 description=description,
                 number_of_tables=int(tables),
                 contact_phone=phone,
+                contact_email=email,
                 address=address,
-                unique_id=uuid.uuid4()
             )
 
             # Associate user with restaurant
